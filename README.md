@@ -57,28 +57,27 @@ To configure the Trello CSV Data Sync application, follow these steps:
 ```
 TRELLO_API_KEY=your-trello-api-key
 TRELLO_OAUTH_TOKEN=your-trello-oauth-token
-LIST_ID=your-trello-list-id
 BOARD_ID=your-trello-board-id
+DEAULT_LIST_NAME=your-trello-default-list-name
 ```
 
 Replace the placeholders with your actual Trello credentials:
 
 - `your-trello-api-key`: Your Trello API key.
 - `your-trello-oauth-token`: Your Trello OAuth token.
-- `your-trello-list-id`: The Trello list ID.
 - `your-trello-board-id`: The Trello board ID for your project.
+- `your-trello-default-list-name`: Your Trello default list of the given board ID.
 
 2. Save the `.env` file in the project directory. The application will automatically load these environment variables when it runs.
 
 You can obtain your Trello API key and OAuth token from the [Trello Developer Portal](https://developer.atlassian.com/cloud/trello/guides/rest-api/api-introduction/).<br>
 You can generate it directly from Trello API: [Accessing Trello API](https://trello.com/power-ups/admin)
 
-<strong>Get your Trello credentials</strong>: 
+<strong>Get your Trello credentials</strong>:
 
 - Look for the "New" button, and set up the integration.
 - To access your board-id, you can go onto the Trello's web application, enter your board and read it's json output by `.json` to the url and submitting a request. The `id` attribute is the board-id.
 - To access a list-id, use `CTRL/CMD + F` to search for your list's name inside the board's json output. For example type `"Backlog"` to find the Backlog list. The `id` above is the list-id.
-
 
 Your configuration is now complete, and you can proceed to use the application as described in the [Usage](#usage) section.
 
@@ -102,24 +101,26 @@ To use the Trello CSV Data Sync application, follow these steps:
 <strong>CSV File Structure</strong>:
 
 ```
-HEADERS: Epic Name,User Story,Description,Labels
-ROW: [Epic Name],[User Story],"[Description]","[Labels]"
+HEADERS: List Name,Epic Name,User Story,Description,Labels
+ROW: "[List Name]",[Epic Name],[User Story],"[Description]","[Labels]"
 ```
 
+- `List Name`: The name of the list where the card should be placed
 - `Epic Name`: The epic name
 - `User Story`: The main task
 - `Description`: The description (user story structured).
 - `Labels`: Card labels.
 
-Sample row below will create the card in the image:
+Sample csv file below will create the card in the image:
 
 ```
-Authentication,Register Account,"As a user, I want to register an account with a unique username and email.","Feature,Bug"
+List Name,Epic Name,User Story,Description,Labels
+"Backlog",Authentication,Register Account,"As a user, I want to register an account with a unique username and email.","Feature,Bug"
 ```
 
 ![Example Image](./assets/card-example.png)
 
-**NOTE: in order for the labels to update properly, the label name provided in the csv file must match the label name in trello**
+**NOTE: in order for the labels to update properly, the label name provided in the csv file must match the label names on your trello board**
 
 ## Contributing
 

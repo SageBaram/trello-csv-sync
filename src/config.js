@@ -10,5 +10,5 @@ dotenv.config({ path: path.resolve(__dirname, "../.env") });
 export const CSV_FILE_PATH = path.join(__dirname, "../requirements.csv");
 export const API_KEY = process.env.TRELLO_API_KEY;
 export const TOKEN = process.env.TRELLO_OAUTH_TOKEN;
-export const LIST_ID = process.env.BACKLOG_ID;
+export const DEFAULT_LIST_NAME = process.env.DEFAULT_LIST_NAME
 export const BOARD_ID = process.env.BOARD_ID;

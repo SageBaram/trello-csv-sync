@@ -1,23 +1,27 @@
 import fs from "fs";
 import csvParser from "csv-parser";
 import {
+	fetchListIdByName,
   fetchCardsFromList,
   fetchBoardLabels,
   addCardToTrello,
   setCardLabels,
 } from "./trello.js";
 import { getLabelIdsByNames } from "./csv.js";
-import { LIST_ID, BOARD_ID, CSV_FILE_PATH } from "./config.js";
+import { BOARD_ID, CSV_FILE_PATH, DEFAULT_LIST_NAME } from "./config.js";
 
 const main = async () => {
-  const existingCards = await fetchCardsFromList(LIST_ID);
   const labels = await fetchBoardLabels(BOARD_ID);
 
-  const existingCardTitles = new Set(
-    existingCards.map((card) => card.name.toLowerCase()),
-  );
-
   const processRow = async (row, labels) => {
+    const listName = row["List Name"] || DEFAULT_LIST_NAME;
+    const listId = await fetchListIdByName(BOARD_ID, listName);
+
+    const existingCards = await fetchCardsFromList(listId);
+    const existingCardTitles = new Set(
+      existingCards.map((card) => card.name.toLowerCase()),
+    );
+
     const title = `${row["Epic Name"]} - ${row["User Story"]}`;
     const description = row["Description"];
     const labelNames = row["Labels"];
@@ -36,7 +40,7 @@ const main = async () => {
         await setCardLabels(existingCard, labelIds);
       }
     } else {
-      await addCardToTrello(title, description, labelIds);
+      await addCardToTrello(listId, title, description, labelIds);
     }
   };
 
